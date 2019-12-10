@@ -1,0 +1,1 @@
+<input type="text" name="<?php echo $field_name; ?>" value="<?php echo $current_value; ?>" class="regular-text">

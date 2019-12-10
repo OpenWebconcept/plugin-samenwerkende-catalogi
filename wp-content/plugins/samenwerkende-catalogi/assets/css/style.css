@@ -1,0 +1,8 @@
+.sc_plugin_meta_box .sc_plugin_meta_box--item { display:block; padding:5px 0 2px 0; }
+.sc_plugin_meta_box #sc_plugin_meta_box--container .sc_plugin_meta_box--item { border-top:1px solid #C4C4C4; }
+.sc_plugin_meta_box .sc_plugin_meta_box--item > label { display:block; font-size:14px; font-weight:600; color:#23282d; margin-bottom:10px; }
+.sc_plugin_meta_box .sc_plugin_meta_box--item .regular-text { width:100%; }
+.sc_plugin_meta_box label.checkbox-label { font-size:13px; font-weight:normal; display:block; color:#444; }
+.sc_plugin_meta_box .sc_plugin_meta_box--item select { margin-bottom: 10px; }
+.sc_plugin_meta_box .select2-container { max-width:100%; width: 100% !important; }
+.sc_plugin_meta_box .sc-select2-ajax { width: 100%; }
