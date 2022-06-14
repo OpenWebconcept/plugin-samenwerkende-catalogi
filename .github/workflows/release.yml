@@ -19,6 +19,7 @@ jobs:
         run: |
           mkdir -p dist/samenwerkende-catalogi
           rsync -av ./ ./dist/samenwerkende-catalogi --exclude /.git --exclude /.github --exclude .gitignore --exclude 'composer.*' --exclude Dockerfile-php-build --exclude DOCKER_ENV --exclude docker_tag --exclude output.log
+          rm -rf dist/samenwerkende-catalogi/dist
           cd dist
           zip -r ../samenwerkende-catalogi.zip ./samenwerkende-catalogi
       - name: Release
