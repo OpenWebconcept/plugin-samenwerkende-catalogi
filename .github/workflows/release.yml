@@ -14,7 +14,7 @@ jobs:
       - name: Archive Release
         run: zip -r samenwerkende-catalogi.zip . -x ".git/*" ".github/*"
       - name: Release
-        uses: fnkr/github-action-ght@v1
+        uses: fnkr/github-action-ghr@v1
         env:
           GHR_PATH: samenwerkende-catalogi.zip
           GHR_REPLACE: true
