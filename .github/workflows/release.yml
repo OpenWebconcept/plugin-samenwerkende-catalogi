@@ -16,7 +16,7 @@ jobs:
         with:
           php_version: "7.4"
       - name: Archive Release
-        run: zip -r samenwerkende-catalogi.zip . -x ".git/*" ".github/*" "composer.*"
+        run: zip -r samenwerkende-catalogi.zip . -x ".git/*" ".github/*" "composer.*" "Dockerfile-php-build" ".gitignore" "DOCKER_ENV" "docker_tag" "output.log"
       - name: Release
         uses: fnkr/github-action-ghr@v1
         env:
