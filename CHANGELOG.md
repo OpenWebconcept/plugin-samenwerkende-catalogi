@@ -10,3 +10,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added EUPL - EUROPEAN UNION PUBLIC LICENCE v. 1.2 license to source code.
 - CHANGELOG.md.
 - GitHub Actions workflow: release. This action runs for every newly pushed git tag, creates a new GitHub release with an installable WordPress plugin file.
+- Added plugin-update-checker to enable updates from a WordPress website.

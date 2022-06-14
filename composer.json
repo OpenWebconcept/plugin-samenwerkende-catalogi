@@ -1,0 +1,8 @@
+{
+    "name": "openwebconcept/plugin-samenwerkende-catalogi",
+    "description": "Plugin voor het cre\u0000ren van een XML-feed voor de Samenwerkende Catalogi",
+    "require": {
+        "yahnis-elsts/plugin-update-checker": "^4.11"
+    },
+    "license": "EUPL-1.2"
+}

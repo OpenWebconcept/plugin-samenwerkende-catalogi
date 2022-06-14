@@ -40,6 +40,8 @@ class SamenwerkendeCatalogi {
 
 	public function __construct() {
 
+		include SC_PLUGIN_DIR . '/vendor/autoload.php';
+
 		include SC_PLUGIN_DIR . '/lib/helpers.php';
 
 		include SC_PLUGIN_DIR . '/classes/class-sc-plugin-init.php';
@@ -54,3 +56,10 @@ class SamenwerkendeCatalogi {
 
 
 $GLOBALS['samenwerkende_catalogi'] = new SamenwerkendeCatalogi();
+
+$myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
+	'https://github.com/OpenWebconcept/plugin-samenwerkende-catalogi',
+	__FILE__,
+	'samenwerkende-catalogi'
+);
+$myUpdateChecker->getVcsApi()->enableReleaseAssets();
