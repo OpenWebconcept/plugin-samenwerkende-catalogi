@@ -3,7 +3,7 @@
 Plugin Name: Samenwerkende Catalogi
 Plugin URI: https://github.com/OpenWebconcept/plugin-samenwerkende-catalogi
 Description: Plugin voor het creëren van een XML-feed voor de Samenwerkende Catalogi
-Version: 1.2.0-rc.1
+Version: 1.2.0-rc.2
 Requires at least: 3.0
 Tested up to: 4.1.1
 Author: Gemeente Heerenveen
@@ -25,7 +25,7 @@ See the Licence for the specific language governing permissions and limitations 
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-if ( ! defined('SC_PLUGIN_VERSION')) define('SC_PLUGIN_VERSION', '1.2.0-rc.1');
+if ( ! defined('SC_PLUGIN_VERSION')) define('SC_PLUGIN_VERSION', '1.2.0-rc.2');
 
 if ( ! defined('SC_PLUGIN_FILE')) define('SC_PLUGIN_FILE', __FILE__);
 if ( ! defined('SC_PLUGIN_DIR')) define('SC_PLUGIN_DIR', dirname(__FILE__));
