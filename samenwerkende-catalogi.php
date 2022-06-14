@@ -25,7 +25,7 @@ See the Licence for the specific language governing permissions and limitations 
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-if ( ! defined('SC_PLUGIN_VERSION')) define('SC_PLUGIN_VERSION', '1.1.1');
+if ( ! defined('SC_PLUGIN_VERSION')) define('SC_PLUGIN_VERSION', '1.1.2');
 
 if ( ! defined('SC_PLUGIN_FILE')) define('SC_PLUGIN_FILE', __FILE__);
 if ( ! defined('SC_PLUGIN_DIR')) define('SC_PLUGIN_DIR', dirname(__FILE__));
@@ -35,7 +35,6 @@ if ( ! defined('SC_PLUGIN_URL')) define('SC_PLUGIN_URL', plugins_url('samenwerke
  * Main Gemeente Heerenveen Plugin Class
  *
  * @class SamenwerkendeCatalogi
- * @version  1.1.0
  */
 class SamenwerkendeCatalogi {
 
