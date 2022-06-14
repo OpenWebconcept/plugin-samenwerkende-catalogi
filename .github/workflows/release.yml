@@ -12,11 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Archive Release
-        uses: thedoctor0/zip-release@main
-        with:
-          type: 'zip'
-          filename: 'samenwerkende-catalogi.zip'
-          exclusions: '*.git*'
+        runs: zip -r samenwerkende-catalogi.zip . -x ".git/*" ".github/*"
       - name: Release
         uses: fnkr/github-action-ght@v1
         env:
