@@ -4,5 +4,6 @@
     "require": {
         "yahnis-elsts/plugin-update-checker": "^4.11"
     },
-    "license": "EUPL-1.2"
+    "license": "EUPL-1.2",
+    "type": "wordpress-plugin"
 }
