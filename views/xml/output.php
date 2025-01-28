@@ -2,6 +2,7 @@
 	$args = array(
 		'post_type'  		=> get_sc_post_types(),
 		'posts_per_page'   	=> -1,
+		'ignore_sticky_posts' => -1,
 		'meta_query' => array(
 			array(
 				'key'     => 'sc_plugin_product',
