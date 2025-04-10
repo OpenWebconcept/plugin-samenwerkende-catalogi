@@ -13,9 +13,7 @@
 * See the Licence for the specific language governing permissions and limitations under the Licence.
 */
 function get_sc_post_types() {
-	return array(
-		'post'
-	);
+	return apply_filters('sc_post_types', ['post']);
 }
 
 function get_sc_text($text = '', $max_len = 50, $rep = '...', $remove_html = false) {
