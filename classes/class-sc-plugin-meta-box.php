@@ -31,30 +31,43 @@ class ScPluginMetaBox {
 		}
 	}
 
-	public function save_fields($post_id, $post) {
-		if ( !current_user_can('edit_post', $post->ID) ) {
-			return $post->ID;
-		}
+    public function save_fields($post_id, $post) {
+        if (!isset($_POST['sc_plugin_nonce']) || !wp_verify_nonce($_POST['sc_plugin_nonce'], 'sc_plugin_save_meta')) {
+            return;
+        }
 
-		if( in_array($post->post_type, get_sc_post_types()) ) {
-			$data = array(
-				'sc_plugin_product' 		=> ($_POST['sc_plugin_product'] && $_POST['sc_plugin_product'] == 'on' ? 'on' : ''),
-				'sc_plugin_particulier' 	=> ($_POST['sc_plugin_particulier'] && $_POST['sc_plugin_particulier'] == 'on' ? 'on' : ''),
-				'sc_plugin_ondernemer' 		=> ($_POST['sc_plugin_ondernemer'] && $_POST['sc_plugin_ondernemer'] == 'on' ? 'on' : ''),
-				'sc_plugin_aanvragen' 		=> sanitize_text_field($_POST['sc_plugin_aanvragen']),
-				'sc_plugin_url' 			=> sanitize_text_field($_POST['sc_plugin_url']),
-				'sc_plugin_upn' 			=> intval($_POST['sc_plugin_upn'])
-			);
+        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+        if (!current_user_can('edit_post', $post->ID)) return;
+        if (!in_array($post->post_type, get_sc_post_types())) return;
 
-			$this->save_data($post->ID, $data);
-		}
-	}
+        update_post_meta($post->ID, 'sc_plugin_product', $_POST['sc_plugin_product'] && $_POST['sc_plugin_product'] == 'on' ? 'on' : '');
 
-	public function save_data($post_id, $data) {
-		foreach ($data as $key => $value) {
-			update_post_meta($post_id, $key, $value);
-		}
-	}
+        $entries = $_POST['sc_plugin_products'] ?? [];
+        $sanitized = [];
+
+        foreach($entries as $entry) {
+            $sanitized[] = [
+                'particulier' => ($entry['sc_plugin_particulier'] && $entry['sc_plugin_particulier'] == 'on' ? 'on' : ''),
+                'ondernemer'  => ($entry['sc_plugin_ondernemer'] && $entry['sc_plugin_ondernemer'] == 'on' ? 'on' : ''),
+                'aanvragen'   => sanitize_text_field($entry['sc_plugin_aanvragen']),
+                'url'         => sanitize_text_field($entry['sc_plugin_url']),
+                'upn'         => intval($entry['sc_plugin_upn']),
+            ];
+        }
+
+        update_post_meta($post->ID, 'sc_plugin_products', $sanitized);
+
+        // Cleanup old metadata
+        $old_fields = [
+            'sc_plugin_particulier', 'sc_plugin_ondernemer',
+            'sc_plugin_aanvragen', 'sc_plugin_url', 'sc_plugin_upn'
+        ];
+        foreach($old_fields as $key) {
+            if(metadata_exists('post', $post->ID, $key)) {
+                delete_post_meta($post->ID, $key);
+            }
+        }
+    }
 
 }
 
@@ -62,31 +75,80 @@ new ScPluginMetaBox();
 
 function sc_plugin_meta_box() {
 	global $post;
-	?>
-	<div class="sc_plugin_meta_box">
-		<div class="sc_plugin_meta_box--item">
-			<label>Type</label>
-			<?php ScPluginFieldInputs::checkbox($post->ID, 'sc_plugin_product', 'Product'); ?>
-		</div>
-		<div id="sc_plugin_meta_box--container">
-			<div class="sc_plugin_meta_box--item">
-				<label>Doelgroep</label>
-				<?php ScPluginFieldInputs::checkbox($post->ID, 'sc_plugin_particulier', 'Particulier'); ?>
-				<?php ScPluginFieldInputs::checkbox($post->ID, 'sc_plugin_ondernemer', 'Ondernemer'); ?>
-			</div>
-			<div class="sc_plugin_meta_box--item">
-				<label>Online aanvragen</label>
-				<?php ScPluginFieldInputs::select($post->ID, 'sc_plugin_aanvragen', array('nee' => 'Nee', 'ja' => 'Ja', 'digid' => 'Ja, met DigiD')); ?>
-			</div>
-			<div class="sc_plugin_meta_box--item">
-				<label>UPN product</label>
-				<?php ScPluginFieldInputs::select2_ajax($post->ID, 'sc_plugin_upn', 'sc-upn-product-options', false, 'get_sc_upn_label_by_id'); ?>
-			</div>
-			<div id="sc_plugin_meta_box--url" class="sc_plugin_meta_box--item">
-				<label>Aanvraag URL</label>
-				<?php ScPluginFieldInputs::text($post->ID, 'sc_plugin_url'); ?>
-			</div>
-		</div>
-	</div>
-	<?php
+    wp_nonce_field('sc_plugin_save_meta', 'sc_plugin_nonce');
+
+    $product_type = get_post_meta($post->ID, 'sc_plugin_product', true);
+    $product_entries = get_post_meta($post->ID, 'sc_plugin_products', true);
+    $products = is_array($product_entries) ? $product_entries : [];
+
+    // Convert previous meta data format
+    if(empty($products)) {
+        $products[] = [
+            'particulier' => get_post_meta($post->ID, 'sc_plugin_particulier', true),
+            'ondernemer' => get_post_meta($post->ID, 'sc_plugin_ondernemer', true),
+            'aanvragen' => get_post_meta($post->ID, 'sc_plugin_aanvragen', true),
+            'url' => get_post_meta($post->ID, 'sc_plugin_url', true),
+            'upn' => get_post_meta($post->ID, 'sc_plugin_upn', true),
+        ];
+    }
+
+    // Preselect used UPN labels
+    $upn_entries = [];
+    foreach($products as $product) {
+        if($product['upn'] > 0) {
+            $upn_entries[$product['upn']] = get_sc_upn_label_by_id($product['upn']);
+        }
+    }
+
+    ?>
+
+    <div class="sc_plugin_meta_box">
+        <div class="sc_plugin_meta_box--item">
+            <label>Type</label>
+            <?php ScPluginFieldInputs::checkbox($post->ID, 'sc_plugin_product', 'Product'); ?>
+        </div>
+        <div id="sc_plugin_meta_box--container">
+            <div id="sc-product-entries"></div>
+        </div>
+        <button type="button" class="button" id="add-product-group">Toevoegen</button>
+        <script>
+            window.scProductEntries = <?php echo json_encode($products) ?>;
+            window.scUPNEntries = <?php echo json_encode($upn_entries) ?>;
+        </script>
+    </div>
+
+    <template id="sc-product-template">
+        <div class="sc-product-group" style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+            <div class="sc_plugin_meta_box--item">
+                <label>Doelgroep</label>
+                <label class="checkbox-label">
+                    <input type="checkbox" name="sc_plugin_products[{{index}}][particulier]" value="on"> Particulier
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" name="sc_plugin_products[{{index}}][ondernemer]" value="on"> Ondernemer
+                </label>
+            </div>
+            <div class="sc_plugin_meta_box--item">
+                <label>Online aanvragen</label>
+                <select name="sc_plugin_products[{{index}}][aanvragen]">
+                    <option value="nee">Nee</option>
+                    <option value="ja">Ja</option>
+                    <option value="digid">Ja, met DigiD</option>
+                </select>
+            </div>
+            <div class="sc_plugin_meta_box--item">
+                <label>UPN</label>
+                <select name="sc_plugin_products[{{index}}][upn]" data-action="sc-upn-product-options" class="sc-select2-ajax">
+                    <option value="{{upn}}">{{upn_label}}</option>
+                </select>
+            </div>
+            <div class="sc_plugin_meta_box--url sc_plugin_meta_box--item">
+                <label>Aanvraag URL</label>
+                <input type="text" name="sc_plugin_products[{{index}}][url]" value="{{url}}" class="regular-text">
+            </div>
+            <button type="button" class="button remove-product-group">Verwijder</button>
+        </div>
+    </template>
+
+    <?php
 }
