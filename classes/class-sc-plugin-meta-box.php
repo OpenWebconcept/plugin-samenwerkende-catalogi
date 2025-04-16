@@ -40,7 +40,7 @@ class ScPluginMetaBox {
         if (!current_user_can('edit_post', $post->ID)) return;
         if (!in_array($post->post_type, get_sc_post_types())) return;
 
-        update_post_meta($post->ID, 'sc_plugin_product', $_POST['sc_plugin_product'] && $_POST['sc_plugin_product'] == 'on' ? 'on' : '');
+        update_post_meta($post->ID, 'sc_plugin_product', isset($_POST['sc_plugin_product']) && $_POST['sc_plugin_product'] == 'on' ? 'on' : '');
 
         $entries = $_POST['sc_plugin_products'] ?? [];
         $sanitized = [];
