@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const entries = window.scProductEntries?.length ? window.scProductEntries : [{}];
 
     function renderTemplate(index, data = {}) {
-        console.log(index, data);
         let html = template.replace(/{{index}}/g, index);
         ['upn', 'url'].forEach(key => {
             html = html.replace(new RegExp(`{{${key}}}`, 'g'), data[key] || '');
