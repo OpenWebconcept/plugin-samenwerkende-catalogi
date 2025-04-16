@@ -47,11 +47,11 @@ class ScPluginMetaBox {
 
         foreach($entries as $entry) {
             $sanitized[] = [
-                'particulier' => ($entry['sc_plugin_particulier'] && $entry['sc_plugin_particulier'] == 'on' ? 'on' : ''),
-                'ondernemer'  => ($entry['sc_plugin_ondernemer'] && $entry['sc_plugin_ondernemer'] == 'on' ? 'on' : ''),
-                'aanvragen'   => sanitize_text_field($entry['sc_plugin_aanvragen']),
-                'url'         => sanitize_text_field($entry['sc_plugin_url']),
-                'upn'         => intval($entry['sc_plugin_upn']),
+                'particulier' => ($entry['particulier'] && $entry['particulier'] == 'on' ? 'on' : ''),
+                'ondernemer'  => ($entry['ondernemer'] && $entry['ondernemer'] == 'on' ? 'on' : ''),
+                'aanvragen'   => sanitize_text_field($entry['aanvragen']),
+                'url'         => sanitize_text_field($entry['url']),
+                'upn'         => intval($entry['upn']),
             ];
         }
 
