@@ -118,7 +118,8 @@ function sc_plugin_meta_box() {
     </div>
 
     <template id="sc-product-template">
-        <div class="sc-product-group" style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+        <fieldset class="sc-product-group" style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+            <legend>Product #{{number}}</legend>
             <div class="sc_plugin_meta_box--item">
                 <label>Doelgroep</label>
                 <label class="checkbox-label">
@@ -147,7 +148,7 @@ function sc_plugin_meta_box() {
                 <input type="text" name="sc_plugin_products[{{index}}][url]" value="{{url}}" class="regular-text">
             </div>
             <button type="button" class="button remove-product-group">Verwijder</button>
-        </div>
+        </fieldset>
     </template>
 
     <?php

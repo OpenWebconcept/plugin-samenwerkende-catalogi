@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function renderTemplate(index, data = {}) {
         let html = template.replace(/{{index}}/g, index);
+        html = html.replace(/{{number}}/g, index + 1);
         ['upn', 'url'].forEach(key => {
             html = html.replace(new RegExp(`{{${key}}}`, 'g'), data[key] || '');
         });
