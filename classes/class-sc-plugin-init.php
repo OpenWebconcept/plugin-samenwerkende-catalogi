@@ -259,7 +259,8 @@ class ScPluginInit {
 
 		$name 		= $this->getUpnByUri($uri);
 		$table_name = $wpdb->prefix . 'sc_uniform_product_names';
-		$upn_row 	= $wpdb->get_row( "SELECT * FROM $table_name WHERE (name='$name' OR label='$label' OR uri='$uri')" );
+        $query      = $wpdb->prepare( "SELECT * FROM {$table_name} WHERE (name = %s OR label = %s OR uri = %s)", $name, $label, $uri );
+        $upn_row 	= $wpdb->get_row( $query );
 
 		if( $upn_row ) {
 
