@@ -35,7 +35,9 @@
                     ];
                 }
 
-                foreach($products as $product) {
+                $product_count = count($products);
+
+                foreach($products as $product_index => $product) {
                     $upn_row                = false;
                     $sc_plugin_aanvragen    = $product['aanvragen'];
                     $sc_plugin_particulier  = $product['particulier'];
@@ -46,13 +48,19 @@
                         $upn_row = get_sc_upn_by_id($sc_plugin_upn);
                     }
 
+                    $permalink = get_the_permalink();
+                    $product_id = $post->ID;
+                    if($product_index > 0) {
+                        $permalink = add_query_arg(['sc' => $product_index], $permalink);
+                        $product_id .= '-' . $product_index;
+                    }
 
                     // Loop trough the different products
                     $xml[] = "<overheidproduct:scproduct owms-version=\"4.0\">";
                         $xml[] = "<overheidproduct:meta>";
 
                             $xml[] = "<overheidproduct:owmskern>";
-                                $xml[] = "<dcterms:identifier>".get_the_permalink()."</dcterms:identifier>";
+                                $xml[] = "<dcterms:identifier>".esc_url($permalink)."</dcterms:identifier>";
                                 $xml[] = "<dcterms:title>".get_the_title()."</dcterms:title>";
                                 $xml[] = "<dcterms:language>nl</dcterms:language>";
                                 $xml[] = "<dcterms:type scheme=\"overheid:Informatietype\">productbeschrijving</dcterms:type>";
@@ -70,7 +78,7 @@
                                 $xml[] = "<dcterms:abstract>".get_sc_text($excerpt, 290, '...', true)."</dcterms:abstract>";
                             $xml[] = "</overheidproduct:owmsmantel>";
                             $xml[] = "<overheidproduct:scmeta>";
-                                $xml[] = "<overheidproduct:productID>".$post->ID."</overheidproduct:productID>";
+                                $xml[] = "<overheidproduct:productID>".$product_id."</overheidproduct:productID>";
                                 $xml[] = "<overheidproduct:onlineAanvragen>".$sc_plugin_aanvragen."</overheidproduct:onlineAanvragen>";
 
                                 if( $sc_plugin_aanvragen == 'ja' || $sc_plugin_aanvragen == 'digid' ) {
